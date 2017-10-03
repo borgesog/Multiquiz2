@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Multiquiz2</string>
+    <string name="question">Question</string>
+    <string name="button">check</string>
+    <string name="correct">Very good!</string>
+    <string name="incorrect">Incorrect</string>
+
+    <!--<string name="question_content">Which is the capital of Catalonia</string>
+    <array name="answers">
+        <item>Calafell</item>
+        <item>Ripoll</item>
+        <item>Barcelona</item>
+        <item>Madrid</item>
+    </array>
+    <integer name="correct_answer">2</integer>-->
+    <array name="all_questions">
+        <item>Which is the capital of Catalonia?;Calafell;Ripoll;*Barcelona; Madrid;</item>
+        <item>Pregunta 2;a;*b;c;d;</item>
+    </array>
+
+
+</resources>
