@@ -17,9 +17,10 @@ public class Multiquiz2Activity extends AppCompatActivity {
     private int current_question;
     private String[] all_questions;
     private boolean[] answer_is_correct;
+    private int[] answer;
     private TextView TextQuestion;
     private RadioGroup group;
-    private Button btn_next;
+    private Button btn_next, btn_prev;
 
 
 
@@ -33,11 +34,16 @@ public class Multiquiz2Activity extends AppCompatActivity {
         TextQuestion = (TextView) findViewById(R.id.TextQuestion);
         group=(RadioGroup) findViewById(R.id.answer_group) ;
         btn_next = (Button) findViewById(R.id.btn_check);
+        btn_prev = (Button) findViewById(R.id.btn_prev);
 
 
 
         all_questions = getResources().getStringArray(R.array.all_questions);
         answer_is_correct=new boolean[all_questions.length];
+        answer=new int[all_questions.length];
+        for (int i=0; i<answer.length;i++){
+            answer[i]=-1;
+        }
         current_question=0;
         showquestion();
 
@@ -53,24 +59,16 @@ public class Multiquiz2Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int id = group.getCheckedRadioButtonId();
-                int answer = -1;
+                int ans = -1;
                 for (int i = 0; i < ids_answers.length; i++) {
                     if (ids_answers[i] == id) {
-                        answer = i;
+                        ans = i;
                     }
                 }
-                /*
-                if (answer == correct_answer) {
-                    Toast.makeText(Multiquiz2Activity.this, R.string.correct, Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(Multiquiz2Activity.this, R.string.incorrect, Toast.LENGTH_SHORT).show();
-                }
-                */
-                answer_is_correct[current_question]=(answer==correct_answer);
+                answer_is_correct[current_question]=(ans==correct_answer);
+                answer[current_question]=ans;
 
                 if (current_question<all_questions.length-1){
-
                     current_question++;
                     showquestion();
                 } else {
@@ -84,18 +82,20 @@ public class Multiquiz2Activity extends AppCompatActivity {
                             String.format("Correctas: %d  -- Incorrectas: %d", correctas,incorrectas);
                     Toast.makeText(Multiquiz2Activity.this, resultado, Toast.LENGTH_LONG).show();
                     finish();
-
                 }
-
-
-
             }
         });
-
+        btn_prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (current_question>0){
+                    current_question--;
+                    showquestion();
+                }
+            }
+        });
         //TODO estaria bien tener un boton que pasa a la anterior
-
     }
-
     private void showquestion() {
         String q= all_questions[current_question];
         String[] parts=q.split(";");
@@ -103,19 +103,27 @@ public class Multiquiz2Activity extends AppCompatActivity {
         group.clearCheck();
         TextQuestion.setText(parts[0]);
 
-        //String[] answers=getResources().getStringArray(R.array.answers);
-
         for (int i=0; i<ids_answers.length; i++){
             RadioButton rb=(RadioButton) findViewById(ids_answers[i]);
-            String answer = parts[i+1];
-            if (answer.charAt(0)=='*'){
+            String ans = parts[i+1];
+            if (ans.charAt(0)=='*'){
                 correct_answer = i;
-                answer=answer.substring(1);
+                ans=ans.substring(1);
             }
-            rb.setText(answer);
+            rb.setText(ans);
+            if (answer[current_question]==i){
+                rb.setChecked(true);
+            }
+        }
+        if (current_question==0){
+            btn_prev.setVisibility(View.GONE);
+        }else{
+            btn_prev.setVisibility(View.VISIBLE);
         }
         if (/*ultima prgunta*/ current_question==all_questions.length-1){
             btn_next.setText(R.string.finish);
+        }else {
+            btn_next.setText(R.string.next);
         }
     }
 }

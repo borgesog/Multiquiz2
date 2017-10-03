@@ -99,6 +99,15 @@
         android:layout_marginBottom="30dp"
         android:text="@string/next" />
 
+    <Button
+        android:id="@+id/btn_prev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextQuestion"
+        android:layout_alignStart="@+id/TextQuestion"
+        android:layout_alignTop="@+id/btn_check"
+        android:text="@string/prev" />
+
 </RelativeLayout>
 
 
