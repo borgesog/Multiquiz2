@@ -14,6 +14,13 @@ public class Multiquiz2Activity extends AppCompatActivity {
             R.id.answer1, R.id.answer2, R.id.answer3, R.id.answer4
     };
     private int correct_answer;
+    private int current_question;
+    private String[] all_questions;
+    private boolean[] answer_is_correct;
+    private TextView TextQuestion;
+    private RadioGroup group;
+    private Button btn_next;
+
 
 
     @Override
@@ -22,32 +29,27 @@ public class Multiquiz2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_multiquiz2);
 
 
-        TextView TextQuestion = (TextView) findViewById(R.id.TextQuestion);
 
-        String[] all_questions = getResources().getStringArray(R.array.all_questions);
-        String q0=all_questions[0];
-        String[] parts=q0.split(";");
+        TextQuestion = (TextView) findViewById(R.id.TextQuestion);
+        group=(RadioGroup) findViewById(R.id.answer_group) ;
+        btn_next = (Button) findViewById(R.id.btn_check);
 
-        TextQuestion.setText(parts[0]);
 
-        //String[] answers=getResources().getStringArray(R.array.answers);
 
-        for (int i=0; i<ids_answers.length; i++){
-            RadioButton rb=(RadioButton) findViewById(ids_answers[i]);
-            String answer = parts[i+1];
-            if (answer.charAt(0)=='*'){
-                correct_answer = i;
-            }
-            rb.setText(parts[i+1]);
-        }
+        all_questions = getResources().getStringArray(R.array.all_questions);
+        answer_is_correct=new boolean[all_questions.length];
+        current_question=0;
+        showquestion();
 
-        //final int correct_answer = getResources().getInteger(R.integer.correct_answer);
+        //Hemos creado un metodo llamado showquestion,
+        // que sera el que lea las preguntas
+        // y nos ayude a poder pasar de pregunta en cada pantalla
 
-        final RadioGroup group=(RadioGroup) findViewById(R.id.answer_group) ;
 
-        Button btn_check = (Button) findViewById(R.id.btn_check);
 
-        btn_check.setOnClickListener(new View.OnClickListener() {
+        //TODO: cuando clickan el boton deberia pasar a la siguiente pregunta
+
+        btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int id = group.getCheckedRadioButtonId();
@@ -57,14 +59,64 @@ public class Multiquiz2Activity extends AppCompatActivity {
                         answer = i;
                     }
                 }
+                /*
                 if (answer == correct_answer) {
                     Toast.makeText(Multiquiz2Activity.this, R.string.correct, Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Toast.makeText(Multiquiz2Activity.this, R.string.incorrect, Toast.LENGTH_SHORT).show();
                 }
+                */
+                answer_is_correct[current_question]=(answer==correct_answer);
+
+                if (current_question<all_questions.length-1){
+
+                    current_question++;
+                    showquestion();
+                } else {
+                    int correctas=0, incorrectas=0;
+                    for (boolean b:answer_is_correct){
+                        if (b)correctas++;
+                        else incorrectas++;
+
+                    }
+                    String resultado=
+                            String.format("Correctas: %d  -- Incorrectas: %d", correctas,incorrectas);
+                    Toast.makeText(Multiquiz2Activity.this, resultado, Toast.LENGTH_LONG).show();
+                    finish();
+
+                }
+
+
+
             }
         });
+
+        //TODO estaria bien tener un boton que pasa a la anterior
+
+    }
+
+    private void showquestion() {
+        String q= all_questions[current_question];
+        String[] parts=q.split(";");
+
+        group.clearCheck();
+        TextQuestion.setText(parts[0]);
+
+        //String[] answers=getResources().getStringArray(R.array.answers);
+
+        for (int i=0; i<ids_answers.length; i++){
+            RadioButton rb=(RadioButton) findViewById(ids_answers[i]);
+            String answer = parts[i+1];
+            if (answer.charAt(0)=='*'){
+                correct_answer = i;
+                answer=answer.substring(1);
+            }
+            rb.setText(answer);
+        }
+        if (/*ultima prgunta*/ current_question==all_questions.length-1){
+            btn_next.setText(R.string.finish);
+        }
     }
 }
 
