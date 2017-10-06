@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Multiquiz2</string>
+    <string name="app_name" translatable="false">Multiquiz PRO</string>
     <string name="question">Question</string>
     <string name="button">check</string>
     <string name="correct">Very good!</string>
@@ -7,6 +7,8 @@
     <string name="next">Next</string>
     <string name="finish">Finish</string>
     <string name="prev">Previous</string>
+    <string name="results">Results</string>
+    <string name="star_over">Start Over</string>
 
     <!--<string name="question_content">Which is the capital of Catalonia</string>
     <array name="answers">
@@ -19,6 +21,7 @@
     <array name="all_questions">
         <item>Which is the capital of Catalonia?;Calafell;Ripoll;*Barcelona; Madrid;</item>
         <item>Pregunta 2;a;*b;c;d;</item>
+        <item>xxxxxxxxxx; asdfg;qwerty;12345;.......;</item>
     </array>
 
 
